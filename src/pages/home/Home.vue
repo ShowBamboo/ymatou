@@ -73,6 +73,8 @@ export default {
   },
 
   mounted() {
+    console.log(this);
+
     // 吸顶效果
     window.onscroll = function() {
       let scrollTop =

@@ -70,16 +70,16 @@ export default {
 
       .nav
         align-items center
-        margin-right 0.08rem
+        margin-right 8px
 
         a
-          padding 0 0.08rem
+          padding 0 8px
 
           span
             display inline-block
-            line-height 0.24rem
-            padding-top 0.07rem
-            font-size 0.12rem
+            line-height 24px
+            padding-top 7px
+            font-size 12px
             color #646464
             text-shadow 0 0 black
 

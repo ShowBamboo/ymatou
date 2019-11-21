@@ -1,5 +1,6 @@
 <template>
   <!-- 热门活动-->
+
   <section class="hot-field">
     <div class="title-bar">
       <div class="title">热门活动</div>
@@ -175,7 +176,14 @@
 </template>
 
 <script>
-export default {};
+import BScroll from "better-scroll";
+export default {
+  mounted() {
+    new BScroll(".scroll-wrapper", {
+      scrollX: true
+    });
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -232,7 +240,7 @@ export default {};
     overflow-y hidden
 
     ul
-      width 100%
+      width max-content
       height 1rem
       white-space nowrap
 

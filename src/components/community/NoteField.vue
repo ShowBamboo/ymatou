@@ -1,10 +1,10 @@
 <template>
   <section class="note-field">
     <div class="waterfall note-waterfall">
-      <div class="fall-item even">
+      <div class="fall-item even" ref="even">
         <NoteItem v-for="(note , index) in evenNote" :key="index" :note="note"></NoteItem>
       </div>
-      <div class="fall-item odd">
+      <div class="fall-item odd" ref="odd">
         <NoteItem v-for="note in oddNote" :key="note.NoteInfo.Noteid" :note="note"></NoteItem>
       </div>
     </div>
@@ -60,9 +60,12 @@ export default {
 
       for (let i = 0; i < resultMore.Result.length; i++) {
         setTimeout(() => {
-          console.log($(".even").height(), $(".odd").height());
+          console.log(
+            this.$refs.even.offsetHeight,
+            this.$refs.odd.offsetHeight
+          );
 
-          if ($(".even").height() < $(".odd").height()) {
+          if (this.$refs.even.offsetHeight < this.$refs.odd.offsetHeight) {
             console.log(1);
 
             this.evenNote.push(resultMore.Result[i]);
@@ -73,14 +76,12 @@ export default {
           }
         }, 0);
       }
-      setTimeout(() => {
-        bScroll.refresh();
-      }, 300);
-
-      // await this.$nextTick(() => {
+      // setTimeout(() => {
       //   bScroll.refresh();
-      // });
+      // }, 300);
 
+      await this.$nextTick();
+      bScroll.refresh();
       bScroll.finishPullUp();
     });
   }

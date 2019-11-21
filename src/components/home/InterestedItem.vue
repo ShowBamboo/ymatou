@@ -30,9 +30,6 @@ export default {
   props: {
     product: {
       type: Object
-    },
-    id: {
-      type: String
     }
   },
   methods: {

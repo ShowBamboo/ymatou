@@ -16,9 +16,15 @@
         :id="product.id"
       ></InterestedItem>
     </ul>
-    <!-- <van-loading v-if="tempMore.length === 0" type="spinner" color="#1989fa" /> -->
+    <van-loading
+      v-if="flag"
+      size="24px"
+      type="spinner"
+      color="#1989fa"
+      style="text-align:center"
+    >臣妾做不到哇...</van-loading>
     <!-- 查看更多 -->
-    <div class="btn-like-more" onclick style="display: block;">加载更多</div>
+    <div v-if="!flag" class="btn-like-more" @click="loadMore" style="display: block;">加载更多</div>
   </div>
 </template>
 
@@ -35,12 +41,29 @@ export default {
   data() {
     return {
       likeProductInfo: [],
-      tempMore: []
+      tempMore: [],
+      flag: false,
+      page: 2
     };
   },
 
   components: {
     InterestedItem
+  },
+  methods: {
+    async loadMore() {
+      this.flag = !this.flag;
+
+      let resultMore = await get({
+        url: `/ymt/home/api/getLikeList?pageNub=${this.page++}&pageSize=20`
+      });
+      this.tempMore = resultMore.likeProductInfo;
+      this.likeProductInfo = [
+        ...this.likeProductInfo,
+        ...resultMore.likeProductInfo
+      ];
+      this.flag = !this.flag;
+    }
   },
 
   async mounted() {
@@ -48,19 +71,6 @@ export default {
       url: "/ymt/home/api/getLikeList?pageNub=1&pageSize=20"
     });
     this.likeProductInfo = result.likeProductInfo;
-
-    // 点击加载更多
-    let page = 2;
-    $(".btn-like-more").on("tap", async () => {
-      let resultMore = await get({
-        url: `/ymt/home/api/getLikeList?pageNub=${page++}&pageSize=20`
-      });
-      this.tempMore = resultMore.likeProductInfo;
-      this.likeProductInfo = [
-        ...this.likeProductInfo,
-        ...resultMore.likeProductInfo
-      ];
-    });
   }
 };
 </script>

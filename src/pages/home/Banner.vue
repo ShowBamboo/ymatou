@@ -1,6 +1,6 @@
 <template>
   <div class="banner">
-    <van-swipe :autoplay="3000" indicator-color="#c33">
+    <van-swipe :autoplay="2000" indicator-color="#c33">
       <van-swipe-item>
         <img
           src="http://pic1.ymatou.com/G02/M06/DE/4C/CgzUDF3OS9uAQFB1AAHLBy1_jzE039_375_128_o.png"

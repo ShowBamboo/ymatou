@@ -1,5 +1,12 @@
 <template>
-  <section class="note-field">
+  <van-loading
+    v-if="oddNote.length === 0"
+    size="24px"
+    type="spinner"
+    color="#1989fa"
+    style="text-align:center;margin-top:30%"
+  >已经到达光速了...</van-loading>
+  <section class="note-field" v-else>
     <div class="waterfall note-waterfall">
       <div class="fall-item even" ref="even">
         <NoteItem v-for="(note , index) in evenNote" :key="index" :note="note"></NoteItem>

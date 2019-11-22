@@ -6,6 +6,7 @@ import Community from 'pages/community/Community'
 import ShoppingCart from 'pages/shoppingcart/ShoppingCart'
 import Profile from 'pages/profile/Profile'
 import ProductDetail from 'pages/detail/ProductDetail'
+import Login from 'pages/login/Login'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,11 @@ const routes = [{
     path: '/productdetail',
     name: 'productdetail',
     component: ProductDetail
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   }
 ]
 

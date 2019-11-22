@@ -4,12 +4,7 @@
   <section class="hot-field">
     <div class="title-bar">
       <div class="title">热门活动</div>
-      <a
-        module_name="activity"
-        class="more"
-        href="javascript:YmtApi.openWin({url:'//m.ymatou.com/note/activityList', msgFlag:1,title:'全部活动',shareFlag:0,showWeiboFlag:1});"
-        module_index
-      >查看全部</a>
+      <a module_name="activity" class="more" href module_index>查看全部</a>
     </div>
     <div class="scroll-wrapper">
       <ul>

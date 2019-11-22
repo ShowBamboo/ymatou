@@ -20,9 +20,9 @@
     <div class="scroll-wrap">
       <div class="discovery-page">
         <!-- 热门活动 -->
-        <HotField></HotField>
+        <!-- <HotField></HotField> -->
         <!-- 瀑布流笔记 -->
-        <NoteField></NoteField>
+        <Test></Test>
       </div>
     </div>
   </div>
@@ -31,13 +31,15 @@
 <script>
 import HotField from "./HotField";
 import NoteField from "components/community/NoteField";
+import Test from "components/community/Test";
 
 import BScroll from "better-scroll";
 
 export default {
   components: {
     HotField,
-    NoteField
+    NoteField,
+    Test
   }
 };
 </script>
@@ -89,8 +91,9 @@ export default {
 
   // 主体
   .scroll-wrap
-    height calc(100% - 50px)
+    height 100%
 
     .discovery-page
       width 100%
+      height 100%
 </style>

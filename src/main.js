@@ -10,6 +10,7 @@ import 'assets/css/animation.css'
 import 'assets/js/zepto.min.js'
 import 'assets/js/swiper.js'
 import 'assets/css/swiper.css'
+import 'assets/js/gVerify.js'
 
 new Vue({
   router,

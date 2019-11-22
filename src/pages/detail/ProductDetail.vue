@@ -64,6 +64,8 @@
         <SkuPop></SkuPop>
         <!-- 买家评价 -->
         <BuyerRate :id="id"></BuyerRate>
+        <!-- 商家信息 -->
+        <Seller></Seller>
         <div data-v-2c8e1059 class="zhengpin">
           <img data-v-2c8e1059 src="//s1.ymatou.com/itemm/static/img/zhengpin.855bfb9.png" />
         </div>
@@ -120,13 +122,14 @@ import LogisticsFreightServer from "./LogisticsFreightServer";
 import SkuPop from "./SkuPop";
 import BuyerRate from "./BuyerRate";
 import ImageText from "./ImageText";
-import Interested from "../../components/home/Interested";
+import Interested from "components/home/Interested";
+import Seller from "./Seller";
 
 export default {
   data() {
     return {
       id: this.$route.query.id,
-      img: this.$route.query.img
+      img: this.$route.params.img
     };
   },
 
@@ -137,10 +140,13 @@ export default {
     SkuPop,
     BuyerRate,
     ImageText,
-    Interested
+    Interested,
+    Seller
   },
 
   mounted() {
+    console.log(this.$route.params);
+
     //图片拖拽
     var mySwiper = new Swiper(".swiper-container", {
       pagination: {

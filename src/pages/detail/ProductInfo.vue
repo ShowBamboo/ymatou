@@ -76,7 +76,7 @@ export default {
   },
 
   mounted() {
-    let { id, name, price, img } = this.$route.query;
+    let { id, name, price, img } = this.$route.params;
     this.name = name;
     this.price = price;
     this.img = img;

@@ -16,13 +16,13 @@
     </div>
     <div class="p-container">
       <div class="p-header">
-        <div class="info">
+        <router-link to="/login" tag="div" class="info">
           <span
             class="avatar"
             style="background-image: url(http://s1.ymatou.com/homem/images/share_personal-9287711f0c.png)"
           ></span>
           <span class="name tologin">请登录</span>
-        </div>
+        </router-link>
       </div>
       <div class="p-content">
         <ul class="p-items">

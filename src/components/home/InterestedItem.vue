@@ -32,15 +32,24 @@ export default {
       type: Object
     }
   },
+
   methods: {
     handleClick() {
       this.$router.push({
-        path: "/productdetail",
+        name: "productdetail",
         query: {
-          id: this.product.id,
+          id: this.product.id
+        },
+        params: {
           name: this.product.name,
           price: this.product.price,
-          img: this.product.pic
+          img: this.product.pic,
+          avatarUrl: this.product.sellerInfo.avatarUrl,
+          sellerName: this.product.sellerInfo.name,
+          sellerLevel: this.product.sellerInfo.sellerLevel,
+          countryName: this.product.sellerInfo.countryName,
+          countryIconUrl: this.product.sellerInfo.countryIconUrl,
+          point: this.product.sellerInfo.sellerDSR.DSRPoint.point
         }
       });
     }

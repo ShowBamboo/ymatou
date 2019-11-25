@@ -3,59 +3,32 @@
     <div class="title-bar">
       <span class="back" @click="backClick"></span>登录
     </div>
-    <div
-      class="register hui_panel"
-      id="wrapper"
-      hui-type="Panel"
-      hui-formname="signup"
-      _rendered="true"
-      _initbehavior="true"
-      ctrid="signup_1003556701"
-    >
+    <div class="register hui_panel" id="wrapper">
       <fieldset>
         <input
           type="text"
           name="tel"
           id="tel"
-          hui-type="Control"
-          hui-formname="Phone"
-          value
           placeholder="输入手机号"
-          _rendered="true"
-          _initbehavior="true"
-          ctrid="Phone_1003556703"
           class="hui_control"
+          v-model="phoneNumber"
         />
         <div class="imgcode-warp">
           <input
             type="text"
             name="imagecode"
             id="imagecode"
-            hui-type="Control"
-            hui-formname="ImgCodeString"
-            value
+            v-model="imgCode"
             placeholder="输入图形验证码"
-            _rendered="true"
-            _initbehavior="true"
-            ctrid="ImgCodeString_1003556704"
             class="hui_control"
           />
           <div class="btn-imgcode" id="btnImgCode"></div>
         </div>
         <div class="code-wrap">
-          <div
-            hui-type="Btncaptcha"
-            hui-formname="ValidationCode"
-            hui-timenum="60"
-            id="ValidationCode_1003556704-1624173120"
-            ctrid="ValidationCode_1003556704"
-            class="hui_btncaptcha"
-            _rendered="true"
-            _initbehavior="true"
-          >
+          <div id="ValidationCode_1003556704-1624173120" class="hui_btncaptcha">
             <div class="btncaptcha">
-              <input type="text" name="code" placeholder="输入短信验证码" maxlength="6" />
-              <button class="btn">获取验证码</button>
+              <input type="text" name="code" placeholder="输入短信验证码" maxlength="6" v-model="msgCode" />
+              <div class="btn" @click="codeClick" v-html="text" :class="{disabled:isDisabled}"></div>
             </div>
           </div>
         </div>
@@ -68,42 +41,88 @@
           >《洋码头用户协议》</a>
         </div>
 
-        <input
-          type="submit"
-          value="登录"
-          class="submit"
-          id="submit"
-          module_index
-          module_name="register"
-          @click="loginClick"
-        />
+        <input type="submit" value="登录" class="submit" id="submit" @click="loginClick" />
       </fieldset>
     </div>
   </div>
 </template>
 
 <script>
+import { post } from "utils/http";
+import store from "../../../node_modules/store/dist/store.legacy";
+
 export default {
   data() {
     return {
-      verifyCode: ""
+      verifyCode: "",
+      phoneNumber: "",
+      imgCode: "",
+      msgCode: "",
+      code: "",
+      text: "获取验证码",
+      isDisabled: false
     };
   },
+
   methods: {
+    async codeClick(ev) {
+      let re = /^1[3456789]\d{9}$/;
+      let res = this.verifyCode.validate(this.imgCode);
+      if (!re.test(this.phoneNumber)) {
+        alert("请填写正确的手机号！");
+        this.phoneNumber = "";
+      }
+      if (!res) {
+        alert("请填写正确的验证码！");
+        this.msgCode = "";
+      }
+      if (re.test(this.phoneNumber) && res) {
+        //倒计时效果
+        let count = 60;
+        this.isDisabled = true;
+        this.text = `${count}s`;
+        let timer = setInterval(() => {
+          if (count === 0) {
+            clearInterval(timer);
+            this.isDisabled = false;
+            this.text = "获取验证码";
+          } else {
+            this.text = `${--count}s`;
+          }
+        }, 1000);
+
+        let result = await post({
+          url: "/test/users/login",
+          data: {
+            mobile: this.phoneNumber
+          }
+        });
+        this.code = result.data.code;
+      }
+    },
     loginClick() {
-      let res = this.verifyCode.validate(
-        document.getElementById("imagecode").value
-      );
-      if (res) {
-        alert("验证正确");
+      if (!this.phoneNumber || !this.imgCode || !this.msgCode) {
+        alert("请填写完整信息");
       } else {
-        alert("验证码错误");
+        if (this.msgCode == this.code) {
+          store.set("phoneNumber", this.phoneNumber);
+
+          this.$router.push({
+            path: "/profile",
+            query: {
+              phoneNumber: this.phoneNumber
+            }
+          });
+        } else {
+          alert("短信验证码错误！");
+        }
       }
     },
     backClick() {
       this.$router.go(-1);
     }
   },
+
   mounted() {
     this.verifyCode = new GVerify("btnImgCode");
   }
@@ -111,6 +130,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.disabled
+  pointer-events none
+
 .register-wrapper
   height 100%
   background-color #f1f1f1

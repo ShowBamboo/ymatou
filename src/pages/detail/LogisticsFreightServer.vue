@@ -11,17 +11,19 @@
       </div>
       <div data-v-5152bdb0 class="logistic-time"></div>
     </div>
-    <div data-v-5152bdb0 class="logistics-pop iphonex" v-show="islogisticsShow">
-      <div data-v-5152bdb0 class="item">
-        <div data-v-5152bdb0 class="name">虚拟发货</div>
-        <div data-v-5152bdb0 class="desc">支付成功且买手接单后，将自动闪电发货</div>
-      </div>
+    <transition enter-active-class="animated slideInUp" leave-active-class="animated slideOutDown">
+      <div data-v-5152bdb0 class="logistics-pop iphonex" v-show="islogisticsShow">
+        <div data-v-5152bdb0 class="item">
+          <div data-v-5152bdb0 class="name">虚拟发货</div>
+          <div data-v-5152bdb0 class="desc">支付成功且买手接单后，将自动闪电发货</div>
+        </div>
 
-      <div data-v-5152bdb0 class="pic">
-        <img data-v-5152bdb0 src="//s1.ymatou.com/itemm/static/img/log-pinyou.e8056fe.png" />
+        <div data-v-5152bdb0 class="pic">
+          <img data-v-5152bdb0 src="//s1.ymatou.com/itemm/static/img/log-pinyou.e8056fe.png" />
+        </div>
+        <div data-v-5152bdb0 class="btn" @click="okClick">确定</div>
       </div>
-      <div data-v-5152bdb0 class="btn" @click="okClick">确定</div>
-    </div>
+    </transition>
     <div data-v-5152bdb0 class="logistics-layer" v-show="isMaskShow"></div>
     <div data-v-5152bdb0 class="freight-wrap">
       <span data-v-5152bdb0 class="tag">运费</span>
@@ -31,22 +33,24 @@
       <span data-v-5152bdb0 class="tag-server">假一赔三</span>
       <span data-v-5152bdb0 class="tag-server">售后无忧</span>
     </div>
-    <div data-v-5152bdb0 class="server-pop iphonex" v-show="isServerShow">
-      <div data-v-5152bdb0 class="server-content">
-        <div data-v-5152bdb0 class="title">服务说明</div>
-        <div data-v-5152bdb0 class="list">
-          <div data-v-5152bdb0 class="service-item">
-            <span data-v-5152bdb0 class="name tag_jyps">假一赔三</span>
-            <div data-v-5152bdb0 class="content">100%海外正品，杜绝假货，让您无忧购物</div>
-          </div>
-          <div data-v-5152bdb0 class="service-item">
-            <span data-v-5152bdb0 class="name tag_btth">售后无忧</span>
-            <div data-v-5152bdb0 class="content">商品在退货时买家只需寄回国内退货仓，无需寄回海外。</div>
+    <transition enter-active-class="animated slideInUp" leave-active-class="animated slideOutDown">
+      <div data-v-5152bdb0 class="server-pop iphonex" v-show="isServerShow">
+        <div data-v-5152bdb0 class="server-content">
+          <div data-v-5152bdb0 class="title">服务说明</div>
+          <div data-v-5152bdb0 class="list">
+            <div data-v-5152bdb0 class="service-item">
+              <span data-v-5152bdb0 class="name tag_jyps">假一赔三</span>
+              <div data-v-5152bdb0 class="content">100%海外正品，杜绝假货，让您无忧购物</div>
+            </div>
+            <div data-v-5152bdb0 class="service-item">
+              <span data-v-5152bdb0 class="name tag_btth">售后无忧</span>
+              <div data-v-5152bdb0 class="content">商品在退货时买家只需寄回国内退货仓，无需寄回海外。</div>
+            </div>
           </div>
         </div>
+        <div data-v-5152bdb0 class="btn" @click="okClick">确定</div>
       </div>
-      <div data-v-5152bdb0 class="btn" @click="okClick">确定</div>
-    </div>
+    </transition>
   </div>
 </template>
 

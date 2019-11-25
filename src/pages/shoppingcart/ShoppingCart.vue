@@ -20,17 +20,41 @@
       </div>
     </div>
 
-    <div data-v-e282b9cc class="notice">海外买手会根据现行国家政策要求，通过不同的物流方式分别发货，其实对你没有影响啦~</div>
+    <div data-v-e282b9cc class="notice">海外买手会根据现行国家政策要求，通过不同的物流方式分别发货，其实对你没有影响啦~放心买，买大块的~</div>
 
-    <div data-v-e282b9cc class="seller-wrap">
-      <div data-v-031042ee data-v-e282b9cc class="seller">
+    <div data-v-e282b9cc class="seller-wrap" v-if="list.length > 0">
+      <div data-v-031042ee data-v-e282b9cc class="seller" v-for="item in list" :key="item.id">
+        <div data-v-031042ee class="seller-info">
+          <div data-v-031042ee class="checkbox-box">
+            <i data-v-031042ee class="switch" :class="{active:isActive}"></i>
+          </div>
+          <div data-v-031042ee class="info">
+            <div data-v-031042ee class="head-img">
+              <img class="img lazyload transition" :src="item.avatarUrl" alt />
+              <!---->
+            </div>
+            <div data-v-031042ee class="desc">
+              <span data-v-031042ee class="name">{{item.sellerName}}</span>
+              <span data-v-031042ee class="country">
+                <img data-v-031042ee :src="item.countryIconUrl" class="img" />
+                {{item.countryName}}
+              </span>
+            </div>
+          </div>
+          <div data-v-031042ee class="spacing"></div>
+        </div>
         <div data-v-031042ee class="promotion-wrap">
           <div data-v-1f07854a data-v-031042ee class="promotion">
             <div data-v-1f07854a class="product-list">
               <div data-v-4d071ed4 data-v-1f07854a class="product">
                 <div data-v-4d071ed4 class="content">
                   <span data-v-4d071ed4 class="checkbox-box">
-                    <i data-v-4d071ed4 class="switch"></i>
+                    <i
+                      data-v-4d071ed4
+                      class="switch"
+                      :class="{active:isActive}"
+                      @click="singleChoosed($event,item.price,item.num)"
+                    ></i>
                   </span>
                   <div data-v-4d071ed4 class="prod-warp">
                     <div data-v-4d071ed4 class="prod-info">
@@ -38,17 +62,17 @@
                         <img
                           data-v-4d071ed4
                           class="lazyload transition"
-                          src="http://pic1.ymatou.com/G02/shangou/M06/8C/C4/CgvUBFoLwZKAJif7AAIvfupCe2E071_53_50_n_w_lb.jpg"
+                          :src="item.img"
                           style="opacity: 1;"
                         />
                       </div>
                       <div data-v-4d071ed4 class="desc">
                         <div data-v-4d071ed4 class="name">
                           <i data-v-4d071ed4 class="tag-taxes">包邮包税</i>
-                          <span data-v-4d071ed4>RYOE/吕 黑吕红吕绿吕棕吕紫吕防脱发洗发水护发素套装无硅油</span>
+                          <span data-v-4d071ed4>{{item.name}}</span>
                         </div>
                         <div data-v-4d071ed4 class="sku">规格分类:红吕护发素400g</div>
-                        <div data-v-4d071ed4 class="preadd-desc"></div>
+                        <!-- <div data-v-4d071ed4 class="preadd-desc"></div> -->
                         <div data-v-4d071ed4 class="serve">
                           <span data-v-4d071ed4 class="tag-py">拼邮</span>
                         </div>
@@ -56,35 +80,29 @@
                     </div>
                   </div>
                   <div data-v-4d071ed4 class="operation">
-                    <div data-v-4d071ed4 class="price">¥ 45</div>
+                    <div data-v-4d071ed4 class="price">¥ {{item.price}}</div>
 
                     <div data-v-4d071ed4 class="amount">
-                      <span data-v-4d071ed4 class="mini">一</span>
-                      <span data-v-4d071ed4 class="num">3</span>
-                      <span data-v-4d071ed4 class="plus">+</span>
+                      <span class="mini" @click="mini($event,item.id,item.num,item.price)">一</span>
+                      <span class="num">{{item.num}}</span>
+                      <span class="plus" @click="plus($event,item.id,item.price)">+</span>
                     </div>
-                    <div
-                      data-v-4d071ed4
-                      module_name="delete_product"
-                      module_index
-                      sproductid="c03b73f6-9157-400d-8ca9-cc13bfcea1f4"
-                      class="delete"
-                    >
-                      <i data-v-4d071ed4></i>
+                    <div class="delete" @click="deleteClick(item.id)">
+                      <i></i>
                     </div>
                   </div>
                 </div>
-                <div data-v-184b9004 data-v-4d071ed4>
-                  <div data-v-184b9004 class="mask"></div>
-                  <div data-v-184b9004 class="dialog-wrapper">
-                    <div data-v-184b9004 class="dialog-content">
-                      <div data-v-184b9004 class="content">
+                <div>
+                  <div class="mask" :class="{show:isShow}"></div>
+                  <div class="dialog-wrapper" :class="{show:isShow}">
+                    <div class="dialog-content">
+                      <div class="content">
                         很抢手哦，下次不一定能遇到，
-                        <br />确认要删除吗？
+                        确认要删除吗？
                       </div>
                       <div data-v-184b9004 class="two-btn">
-                        <span data-v-184b9004>取消</span>
-                        <span data-v-184b9004>删除</span>
+                        <span @click="cancelDelete">取消</span>
+                        <span @click="sureDelete">删除</span>
                       </div>
                     </div>
                   </div>
@@ -96,30 +114,31 @@
       </div>
     </div>
 
-    <div data-v-e282b9cc class="nodata" style="display:none">
+    <div data-v-e282b9cc class="nodata" v-else>
       <div data-v-e282b9cc class="content">
         <img data-v-e282b9cc src="//s1.ymatou.com/shoppingcartm/static/img/nodata.f569491.png" />
-        <span data-v-e282b9cc>购物车里还木有东西呢</span>
+        <span data-v-e282b9cc>你离开后的世界，空空如也</span>
       </div>
     </div>
 
     <Interested></Interested>
+
     <div data-v-e282b9cc class="operate-wrap">
       <div data-v-0c59cb10 data-v-e282b9cc class="operate notIphoneX">
         <div data-v-0c59cb10 class="btn-choose">
           <span data-v-0c59cb10 module_name="select_all" module_index class="checkbox-box">
-            <i data-v-0c59cb10 class="switch"></i>
+            <i data-v-0c59cb10 class="switch" :class="{active:isActive}" @click="allChoosed"></i>
           </span>
           <span data-v-0c59cb10 class="text">全选</span>
         </div>
         <div data-v-0c59cb10 class="desc">
           <span data-v-0c59cb10 class="price">
             总价：
-            <i data-v-0c59cb10>¥ 0</i>
+            <i data-v-0c59cb10>¥ {{totalPrice}}</i>
           </span>
           <span data-v-0c59cb10 class="carriage">( 不含运费)</span>
         </div>
-        <div data-v-0c59cb10 class="btn-goorder disabled">去结算</div>
+        <div data-v-0c59cb10 class="btn-goorder" :class="{disabled:isDisabled}">去结算</div>
       </div>
     </div>
   </div>
@@ -128,9 +147,97 @@
 <script>
 import Interested from "components/home/Interested";
 
+import { PLUS, MINI, DELETE } from "store/modules/action-types";
+
 export default {
+  data() {
+    return {
+      isActive: false,
+      totalPrice: 0,
+      isDisabled: true,
+      isShow: false,
+      deleteId:0
+    };
+  },
+
   components: {
     Interested
+  },
+
+  computed: {
+    list() {
+      return this.$store.state.cart.list;
+    }
+  },
+
+  methods: {
+    singleChoosed(ev, price, num) {
+      if (ev.target.className.indexOf("active") != -1) {
+        ev.target.className = "switch";
+
+        this.totalPrice =
+          Math.round((this.totalPrice - price * num) * 100) / 100;
+      } else {
+        ev.target.className = "switch active";
+        this.totalPrice =
+          Math.round((this.totalPrice + price * num) * 100) / 100;
+      }
+      if (this.totalPrice === 0) {
+        this.isDisabled = true;
+      } else {
+        this.isDisabled = false;
+      }
+    },
+
+    allChoosed() {
+      this.isActive = !this.isActive;
+      if (this.isActive === true) {
+        this.totalPrice = this.$store.state.cart.list.reduce((sum, value) => {
+          return (sum += value.price * value.num);
+        }, 0);
+      } else {
+        this.totalPrice = 0;
+      }
+      if (this.totalPrice === 0) {
+        this.isDisabled = true;
+      } else {
+        this.isDisabled = false;
+      }
+    },
+
+    mini(ev, id, num, price) {
+      if (num > 1) {
+        this.$store.dispatch("cart/" + MINI, id);
+        if (
+          ev.path[3].children[0].childNodes[0].className.indexOf("active") != -1
+        ) {
+          this.totalPrice = Math.round((this.totalPrice - price) * 100) / 100;
+        }
+      }
+    },
+
+    plus(ev, id, price) {
+      this.$store.dispatch("cart/" + PLUS, id);
+      if (
+        ev.path[3].children[0].childNodes[0].className.indexOf("active") != -1
+      ) {
+        this.totalPrice = Math.round((this.totalPrice + price) * 100) / 100;
+      }
+    },
+
+    deleteClick(id) {
+      this.isShow = true;
+      this.deleteId = id
+    },
+
+    cancelDelete() {
+      this.isShow = false;
+    },
+
+    sureDelete() {
+      this.isShow = false;
+      this.$store.dispatch("cart/" + DELETE, this.deleteId);
+    }
   }
 };
 </script>
@@ -228,6 +335,24 @@ export default {
             position relative
             vertical-align middle
 
+          .active
+            background-color #c33
+            border none
+
+            &:before
+              content ''
+              display block
+              width 0.09rem
+              height 0.04rem
+              border-width 1px
+              border-style solid
+              border-color transparent transparent #fff #fff
+              position absolute
+              left 50%
+              top 38%
+              transform translate(-50%, -50%) rotate(-45deg)
+              -webkit-transform translate(-50%, -50%) rotate(-45deg)
+
         .text
           display inline-block
           line-height 0.23rem
@@ -286,4 +411,425 @@ export default {
     font-size 0.12rem
     line-height 0.18rem
     color #9b9b9b
+
+  .seller-wrap
+    overflow hidden
+
+    .seller
+      width 100%
+      overflow hidden
+      min-height 1.6rem
+      margin-bottom 0.1rem
+      position relative
+      background #fff
+
+      .seller-info
+        width 100%
+        overflow hidden
+        padding 0.05rem 0
+        height 0.5rem
+        border-bottom 1px solid #dedede
+        justify-content space-between
+        display flex
+        -webkit-justify-content space-between
+
+        .checkbox-box
+          padding-left 0.1rem
+          padding-top 0.09rem
+          width 0.42rem
+
+          .switch
+            display inline-block
+            width 0.22rem
+            height 0.22rem
+            border-radius 50%
+            border 1px solid #9b9b9b
+            background-color #fff
+            position relative
+            vertical-align middle
+
+          .active
+            background-color #c33
+            border none
+
+            &:before
+              content ''
+              display block
+              width 0.09rem
+              height 0.04rem
+              border-width 1px
+              border-style solid
+              border-color transparent transparent #fff #fff
+              position absolute
+              left 50%
+              top 38%
+              transform translate(-50%, -50%) rotate(-45deg)
+              -webkit-transform translate(-50%, -50%) rotate(-45deg)
+
+        .info
+          display flex
+          flex 1
+
+          .head-img
+            width 0.5rem
+            height 0.4rem
+
+            .img
+              display inline-block
+              width 0.4rem
+              height 0.4rem
+              border-radius 50%
+              overflow hidden
+              background-size cover
+              background-repeat no-repeat
+              border 1px solid #dedede
+
+          .desc
+            position relative
+            height 0.4rem
+
+            span
+              display inline-block
+              overflow hidden
+              font-size 0
+              float left
+
+            span.name
+              padding-top 0.05rem
+              font-size 0.12rem
+              color #646464
+              line-height 0.17rem
+              position relative
+              padding-right 0.1rem
+              min-width 1rem
+              max-width 0.7rem
+              text-overflow ellipsis
+              -webkit-line-clamp 1
+              overflow hidden
+              white-space normal
+
+            span.country
+              position absolute
+              left 0
+              bottom 0.04rem
+              padding 0 0 0 0.15rem
+              font-size 0.12rem
+              color #646464
+              line-height 0.14rem
+              vertical-align center
+              text-overflow ellipsis
+              -webkit-line-clamp 1
+              overflow hidden
+              white-space normal
+
+              .img
+                position absolute
+                left 0
+                top 0.01rem
+                display inline-block
+                width 0.12rem
+                height 0.12rem
+                border-radius 50%
+
+      .promotion-wrap
+        .promotion
+          width 100%
+          overflow hidden
+          position relative
+          border-bottom 1px solid #dedede
+
+          .product-list
+            .product
+              width 100%
+              overflow hidden
+              padding 0.14rem 0 0.1rem
+
+              .content
+                width 100%
+                overflow hidden
+                display flex
+
+                .checkbox-box
+                  padding-left 0.1rem
+                  padding-top 0.1rem
+                  width 0.42rem
+                  height 0.7rem
+                  overflow hidden
+                  display inline-block
+
+                  .switch
+                    display inline-block
+                    width 0.22rem
+                    height 0.22rem
+                    border-radius 50%
+                    border 1px solid #9b9b9b
+                    background-color #fff
+                    position relative
+                    vertical-align middle
+
+                  .active
+                    background-color #c33
+                    border none
+
+                    &:before
+                      content ''
+                      display block
+                      width 0.09rem
+                      height 0.04rem
+                      border-width 1px
+                      border-style solid
+                      border-color transparent transparent #fff #fff
+                      position absolute
+                      left 50%
+                      top 38%
+                      transform translate(-50%, -50%) rotate(-45deg)
+                      -webkit-transform translate(-50%, -50%) rotate(-45deg)
+
+                .prod-warp
+                  overflow hidden
+                  flex 1
+
+                  .prod-info
+                    width 100%
+                    overflow hidden
+                    display flex
+
+                    .pic
+                      width 0.7rem
+                      margin-right 0.1rem
+                      overflow hidden
+
+                      img
+                        height 0.7rem
+                        width 0.7rem
+
+                    .desc
+                      flex 1
+                      overflow hidden
+                      padding-right 0.05rem
+
+                      .name
+                        width 100%
+                        height 0.28rem
+                        line-height 0.14rem
+                        text-overflow ellipsis
+                        -webkit-line-clamp 2
+                        overflow hidden
+                        white-space normal
+                        font-size 0.12rem
+                        color #383838
+
+                        i
+                          display inline-block
+                          position relative
+                          top -1px
+                          margin 1px 0
+
+                        i.tag-taxes
+                          vertical-align middle
+                          font-size 0.12rem
+                          border 1px solid #c33
+                          padding 0.01rem 0.02rem
+                          margin-right 0.03rem
+                          color #c33
+                          line-height 0.1rem
+                          border-radius 3px
+
+                      .sku
+                        margin 0.06rem 0
+                        overflow hidden
+                        min-height 0.12rem
+                        font-size 0.12rem
+                        color #9b9b9b
+
+                      .preadd-desc
+                        margin 0.06rem 0
+                        min-height 0.12rem
+                        font-size 0.12rem
+                        color #c33
+                        text-overflow ellipsis
+                        -webkit-line-clamp 2
+                        overflow hidden
+                        white-space normal
+
+                      .serve
+                        width 100%
+                        overflow hidden
+                        font-size 0.12rem
+
+                        span
+                          display inline-block
+                          line-height 0.12rem
+                          padding-left 0.15rem
+                          position relative
+                          color #646464
+
+                        span.tag-py
+                          background-image url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAdVJREFUeNpiZICCfzk6CkCqHogDgFiAgTzwAYg3AHEj05QrD0ACjFDDDYDUfgoMxmaRI9CSC4xQl5+nouHIlhgyQYOF2oYzQM2sZ4KGOfGAk5eBQUgKwZfRwKc6gAmf6xknXwZjmCGMXlkMjF3HGBjz58MtYyxfDRGLacHqCxaiXP3kBpj6//YpJFWAfKDnBPEN1KL/l/Zh1cpEUvCc3MjA8O4ZxDdAXzE6xEDEQYbjsACUiv5jCxoMcPs0A4OqKV77/09Kgqgj6AOQImSFIPbTm5hiUN8wfP8M4YNoYnyA7pP/ubqQcAcaiCwGinQGz0yw4WDXkxsHjHnzGBgbd5KVGTB9AHQp2GWg8EZO78QALD7B7gNzfxTD/8/Ox4g8YgGmBaCIAya5/2s7EWIgPtBl/+vdEZaC4mX7dITLgXxs8YDVB2AXH1iCKQFLplhSC/E+wBdhyBmLSIC1qABHsooJSgHHGFwOL5P+Y/MdKT74j5ZrwRaCIh4kB4obaNlErA8+YJSoIAOgEQguxIB8RlCBBhJHcj3IIYzQQhBXpQPKB6CyN4GBNmABKIgaob6gNvgArvyhtb8jlS2BVfoPwJEMqv1BFTTISxRa9AFqhiHUTAaAAAMAsOi0UGoVLXUAAAAASUVORK5CYII=')
+                          background-size contain
+                          background-repeat no-repeat
+
+                .operation
+                  width 0.8rem
+                  overflow hidden
+                  padding-right 0.1rem
+                  text-align right
+
+                  .price
+                    width 100%
+                    text-align right
+                    line-height 0.14rem
+                    color #c33
+                    font-size 0.14rem
+
+                  .tag-price
+                    width auto
+                    margin-top 0.05rem
+                    border-radius 0.03rem
+                    color #fff
+                    font-size 0.12rem
+                    padding 0.01rem 0.03rem
+                    line-height 0.14rem
+                    text-align center
+                    display inline-block
+                    background-color #f6934d
+
+                  .amount
+                    width 0.9rem
+                    position relative
+                    right 0.15rem
+                    margin-top 0.1rem
+                    vertical-align middle
+                    font-size 0
+
+                    span
+                      display inline-block
+
+                    span.mini
+                      font-size 0.12rem
+                      border-top-left-radius 0.02rem
+                      border-bottom-left-radius 0.02rem
+                      width 0.2rem
+                      display inline-block
+                      border 1px solid #cecece
+                      line-height 0.2rem
+                      text-align center
+                      color #cdcdcd
+                      vertical-align top
+
+                    span.num
+                      width 0.3rem
+                      line-height 0.2rem
+                      color #383838
+                      font-size 0.12rem
+                      vertical-align middle
+                      border-top 1px solid #cecece
+                      border-bottom 1px solid #cecece
+                      text-align center
+
+                    span.plus
+                      border-top-right-radius 0.02rem
+                      border-bottom-right-radius 0.02rem
+                      width 0.2rem
+                      display inline-block
+                      border 1px solid #cecece
+                      line-height 0.2rem
+                      font-size 0.16rem
+                      text-align center
+                      color #cdcdcd
+                      vertical-align top
+
+                  .delete
+                    width 0.2rem
+                    height 0.2rem
+                    position relative
+                    display inline-block
+                    margin 0.1rem 0 0
+
+                    i
+                      width 0.14rem
+                      height 0.15rem
+                      position absolute
+                      left 50%
+                      top 50%
+                      margin-top -0.07rem
+                      margin-left -0.07rem
+                      background-image url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAAAAXNSR0IArs4c6QAAArpJREFUSA3dlj1oU1EUx33JI2kWBXEwCFKSgjhI28Wl4KJ2CEVbHLRQMMlLJgcHK1QRXEX8GHTLpyCICgaXKOoiOkgHh6pdNFBFDUVcOkgLyYu/W7yX++4LaMlLBi/cnHPP/d/zP+fcjxdr219apVIZarfbFzqdzinLsvYiLX0JNkydL9ju2bZ9JZPJrOvzpm6bBnPcarUeYpuiuzj+Kgh0zJ8ARrBdBjuGnNbnTV1FKxZWq9URFm2XoFAodMB13QokP7A5YL7LOV2C2wOuhG0X+mn0D3KerNfS6fQnGegmYaFQyGC4hsOdEhikxPdP/J3L5XJ3rFKpNENEjzBsMPEM0rUgyfC1g36UHg2Hw9M2BAuCgFIccRzntdCDbsVi8RA8Lzl8Cxbl/CUIyO560ESGv3nGbZvMLlLSm0RwyQD0Y3jWTiQStxuNxjcyHIb4Kixv0G8ExDZPIgfxdx5/n5PJZE1dC+o8zuRbJh7k8/mTQRCyXeIwztBH8bkkfIbEj96IxtXHQes+QrL0vCRBE3Z72lSG5XJ5in29xf2Z5I38KMkp1X1RCS7yrLRxn/cR61P6GcpXl3ZT+jLUS8riCfow90e8kaqBmWQgumoENiawGCaUsYviIwSjMuyC79nkI9Qz7Nl7Fwc+Qkrzn2dIFQabISetr/fQt4cDPzQDL2m/M/Q9bca1WCSAVbb1vXGlXmHzHC6ev3esXeX7umhgPUMfoZ4hfzlqoEX3NN7QYx4Dg2w2u4zYbdrNsTo0RLh5OiEM7JTiS31vJbEixLAiyCjLuJzsRVJy4Xu/8BmLxVakL08EfPVfADwM6C6yhtyQwK1I1g2xfpZ+Av05W6C+LOYeOgCeAJyDYA65FR6FlevwtRyJRHJqAsWToZio1+vRZrN5nNKOcuKiOvhfdQjXIVuKx+OPU6mUp0q/AcxRJUgmF2YrAAAAAElFTkSuQmCC')
+                      background-size contain
+                      background-repeat no-repeat
+
+              .mask
+                position fixed
+                z-index 99
+                top 0
+                right 0
+                bottom 0
+                left 0
+                display none
+                background rgba(56, 56, 56, 0.2)
+
+              .mask.show
+                display block
+                transform scale(1)
+
+              .dialog-wrapper
+                max-height 80%
+                z-index 1110
+                position fixed
+                width 3rem
+                border-radius 0.05rem
+                top 50%
+                left 50%
+                text-align center
+                transform-origin 0 0
+                -webkit-transform-origin 0 0
+                transition all 0.25s ease-in-out
+                -webkit-transition all 0.25s ease-in-out
+                padding 0
+                opacity 0
+                transform scale(0) translate(-50%, -50%)
+                -webkit-transform scale(0) translate(-50%, -50%)
+
+                .dialog-content
+                  background #fff
+                  position relative
+                  color #646464
+                  border-radius 0.1rem
+                  text-align center
+
+                  .content
+                    padding 0.2rem 0.36rem
+                    color #646464
+                    font-size 15px
+                    text-align center
+
+                  .two-btn
+                    width 100%
+                    padding 0.05rem 0
+                    border-top 1px solid #dedede
+                    white-space normal
+                    overflow hidden
+
+                    span
+                      display inline-block
+                      width 50%
+                      overflow hidden
+                      line-height 0.4rem
+                      float left
+                      font-size 15px
+                      color #646464
+                      position relative
+
+                      &:first-child:after
+                        content ''
+                        position absolute
+                        width 1px
+                        right 0
+                        top 0.05rem
+                        height 0.3rem
+                        background #dedede
+
+              .dialog-wrapper.show
+                opacity 1
+                transform scale(1) translate(-50%, -50%)
 </style>

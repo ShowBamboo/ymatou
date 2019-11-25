@@ -29,57 +29,56 @@
         </div>
       </div>
       <div data-v-7949db3c class="coupon-layer" v-show="isCouponShow"></div>
-      <div data-v-7949db3c class="coupon-pop iphonex" v-show="isCouponShow">
-        <div data-v-7949db3c class="title">买手优惠券</div>
-        <div data-v-7949db3c class="list">
-          <div data-v-7949db3c class="item">
-            <div data-v-7949db3c class="cart">
-              <div data-v-7949db3c class="price">
-                ¥
-                <i data-v-7949db3c>60</i>
+      <transition
+        enter-active-class="animated slideInUp"
+        leave-active-class="animated slideOutDown"
+      >
+        <div data-v-7949db3c class="coupon-pop iphonex" v-show="isCouponShow">
+          <div data-v-7949db3c class="title">买手优惠券</div>
+          <div data-v-7949db3c class="list">
+            <div data-v-7949db3c class="item">
+              <div data-v-7949db3c class="cart">
+                <div data-v-7949db3c class="price">
+                  ¥
+                  <i data-v-7949db3c>60</i>
+                </div>
+                <div data-v-7949db3c class="rule">满1999元可用</div>
               </div>
-              <div data-v-7949db3c class="rule">满1999元可用</div>
-            </div>
-            <div data-v-7949db3c class="info">
-              <div data-v-7949db3c class="name">
-                <span data-v-7949db3c>买手券</span>限买手(首尔姐妹花)商品
+              <div data-v-7949db3c class="info">
+                <div data-v-7949db3c class="name">
+                  <span data-v-7949db3c>买手券</span>限买手(首尔姐妹花)商品
+                </div>
+                <div data-v-7949db3c class="time">2019.11.22-2019.11.25</div>
+                <div
+                  data-v-7949db3c
+                  module_index
+                  module_name="coupon"
+                  sproductid="04f8bcd8-a103-40e0-8fa7-1e11bb19308f"
+                  sellerid="20927755"
+                  class="btn"
+                >点击领取</div>
               </div>
-              <div data-v-7949db3c class="time">2019.11.22-2019.11.25</div>
-              <div
-                data-v-7949db3c
-                module_index
-                module_name="coupon"
-                sproductid="04f8bcd8-a103-40e0-8fa7-1e11bb19308f"
-                sellerid="20927755"
-                class="btn"
-              >点击领取</div>
             </div>
           </div>
+          <div data-v-7949db3c class="close" @click="closeClick">关闭</div>
         </div>
-        <div data-v-7949db3c class="close" @click="closeClick">关闭</div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+import store from "../../../node_modules/store/dist/store.legacy";
+
 export default {
   data() {
     return {
       isCouponShow: false,
 
-      id: "",
-      name: "",
-      price: "",
-      img: ""
+      id: this.$route.query.id || store.get("info").id,
+      price: this.$route.params.price || store.get("info").price,
+      name: this.$route.params.name || store.get("info").name
     };
-  },
-
-  mounted() {
-    let { id, name, price, img } = this.$route.params;
-    this.name = name;
-    this.price = price;
-    this.img = img;
   },
 
   methods: {

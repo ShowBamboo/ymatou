@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import store from "../../../node_modules/store/dist/store.legacy";
+
 export default {
   props: {
     product: {
@@ -35,22 +37,28 @@ export default {
 
   methods: {
     handleClick() {
+      let info = {
+        id: this.product.id,
+        name: this.product.name,
+        price: this.product.price,
+        img: this.product.pic,
+        avatarUrl: this.product.sellerInfo.avatarUrl,
+        sellerName: this.product.sellerInfo.name,
+        sellerLevel: this.product.sellerInfo.sellerLevel,
+        countryName: this.product.sellerInfo.countryName,
+        countryIconUrl: this.product.sellerInfo.countryIconUrl,
+        point: this.product.sellerInfo.sellerDSR.DSRPoint.point,
+        num: 1
+      };
+
+      store.set("info", info);
+
       this.$router.push({
         name: "productdetail",
         query: {
           id: this.product.id
         },
-        params: {
-          name: this.product.name,
-          price: this.product.price,
-          img: this.product.pic,
-          avatarUrl: this.product.sellerInfo.avatarUrl,
-          sellerName: this.product.sellerInfo.name,
-          sellerLevel: this.product.sellerInfo.sellerLevel,
-          countryName: this.product.sellerInfo.countryName,
-          countryIconUrl: this.product.sellerInfo.countryIconUrl,
-          point: this.product.sellerInfo.sellerDSR.DSRPoint.point
-        }
+        params: info
       });
     }
   }

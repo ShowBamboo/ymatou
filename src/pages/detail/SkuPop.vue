@@ -10,8 +10,8 @@
       class="sku-btn"
       @click="showClick"
     >
-      <span data-v-0a7494f4 class="tag">已选</span>
-      <span data-v-0a7494f4 class="value">酒糟面膜170g</span>
+      <span data-v-0a7494f4 class="tag">选择</span>
+      <span data-v-0a7494f4 class="value">规格</span>
     </div>
     <div data-v-0a7494f4 class="sku-pop-layer" v-show="isShow"></div>
     <div data-v-0a7494f4 class="sku-pop" v-show="isShow">

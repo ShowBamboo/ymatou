@@ -21,7 +21,8 @@
             class="avatar"
             style="background-image: url(http://s1.ymatou.com/homem/images/share_personal-9287711f0c.png)"
           ></span>
-          <span class="name tologin">请登录</span>
+          <span class="name tologin" v-if="phoneNumber===''">登录查看更多哦</span>
+          <span class="name tologin" v-else>欢迎，{{phoneNumber}}</span>
         </router-link>
       </div>
       <div class="p-content">
@@ -45,7 +46,16 @@
 </template>
 
 <script>
-export default {};
+import store from "../../../node_modules/store/dist/store.legacy";
+
+export default {
+  data() {
+    return {
+      phoneNumber:
+        this.$route.query.phoneNumber || store.get("phoneNumber") || ""
+    };
+  }
+};
 </script>
 
 <style lang="stylus" scoped>

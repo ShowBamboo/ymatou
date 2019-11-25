@@ -61,7 +61,72 @@
         <!-- 物流运费 -->
         <LogisticsFreightServer></LogisticsFreightServer>
         <!-- 选择规格 -->
-        <SkuPop></SkuPop>
+        <div data-v-0a7494f4 data-v-2c8e1059 class="sku-wrap">
+          <div class="sku-btn" @click="showClick">
+            <span data-v-0a7494f4 class="tag">选择</span>
+            <span data-v-0a7494f4 class="value">规格</span>
+          </div>
+          <div data-v-0a7494f4 class="sku-pop-layer" v-show="isShow"></div>
+          <transition
+            enter-active-class="animated slideInUp"
+            leave-active-class="animated slideOutDown"
+          >
+            <div data-v-0a7494f4 class="sku-pop" v-show="isShow">
+              <div data-v-0a7494f4 class="sku-content">
+                <div data-v-0a7494f4 class="sku-info">
+                  <img class="pic" :src="img" alt />
+                  <div data-v-0a7494f4 class="desc">
+                    <span data-v-0a7494f4 class="price">
+                      <i data-v-0a7494f4>¥&nbsp;</i>59
+                    </span>
+                    <span data-v-0a7494f4 class="stock">库存充足</span>
+                    <span data-v-0a7494f4 class="choosed">已选择: 酒糟面膜170g</span>
+                  </div>
+                </div>
+                <div data-v-0a7494f4 class="spec-wrap">
+                  <div data-v-0a7494f4 class="spec">
+                    <div data-v-0a7494f4 class="title">规格分类</div>
+                    <div data-v-0a7494f4 class="options">
+                      <span
+                        class="sku"
+                        :class="{selected:isSelected}"
+                        @click="selectedClick"
+                      >酒糟面膜170g</span>
+                      {
+                      "value": "酒糟面膜170g"
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div data-v-0a7494f4 class="purchase-amount">
+                  <div data-v-0a7494f4 class="text">
+                    <span data-v-0a7494f4 class="title">
+                      购买数量
+                      <br data-v-0a7494f4 />
+                    </span>
+                  </div>
+                  <div data-v-0a7494f4 class="amount">
+                    <input
+                      data-v-0a7494f4
+                      type="button"
+                      value="-"
+                      @click="reduceNum"
+                      class="btn-minus"
+                    />
+                    <span data-v-0a7494f4 class="num">{{obj.num}}</span>
+                    <input data-v-0a7494f4 type="button" value="+" @click="addNum" class="btn-plus" />
+                  </div>
+                </div>
+              </div>
+              <div data-v-0a7494f4 class="preorder-pop-layer preorder-pop-layer-active"></div>
+              <div data-v-0a7494f4 class="spec-confirm">
+                <span class="half" @click="addCart(obj)">加入购物车</span>
+                <span class="half">立即购买</span>
+              </div>
+              <div data-v-0a7494f4 class="close" @click="closeClick"></div>
+            </div>
+          </transition>
+        </div>
         <!-- 买家评价 -->
         <BuyerRate :id="id"></BuyerRate>
         <!-- 商家信息 -->
@@ -76,39 +141,19 @@
         <!-- 加购购买 -->
         <div data-v-2c8e1059 class="operate-wrap notIphoneX" v-show="true">
           <div data-v-2c8e1059 class="left">
-            <span
-              data-v-2c8e1059
-              module_index
-              module_name="bar_bottom"
-              sub_module_name="collect"
-              sproductid="04f8bcd8-a103-40e0-8fa7-1e11bb19308f"
-              sellerid="20927755"
-              class="collection"
-            >
+            <span class="collection">
               <i data-v-2c8e1059 class="icon icon-collect"></i>
               <i data-v-2c8e1059 class="text">收藏</i>
             </span>
           </div>
           <div data-v-2c8e1059 class="right">
-            <span
-              data-v-2c8e1059
-              module_index
-              module_name="bar_bottom"
-              sub_module_name="add_to_shoppingcart"
-              sproductid="04f8bcd8-a103-40e0-8fa7-1e11bb19308f"
-              sellerid="20927755"
-              class="addCart"
-            >加入购物车</span>
-            <span
-              data-v-2c8e1059
-              module_index
-              module_name="bar_bottom"
-              sub_module_name="go_buy"
-              sproductid="04f8bcd8-a103-40e0-8fa7-1e11bb19308f"
-              sellerid="20927755"
-              class="buy"
-            >立即购买</span>
+            <span class="addCart" @click="showClick">加入购物车</span>
+            <span class="buy" @click="showClick">立即购买</span>
           </div>
+        </div>
+        <!-- 加购提示 -->
+        <div class="outputlog" v-show="successShow">
+          <strong class="text">哈尼，我在购物车等你哦~</strong>
         </div>
       </div>
     </div>
@@ -125,11 +170,20 @@ import ImageText from "./ImageText";
 import Interested from "components/home/Interested";
 import Seller from "./Seller";
 
+import { ADDCART } from "store/modules/action-types";
+
+import store from "../../../node_modules/store/dist/store.legacy";
+
 export default {
   data() {
     return {
-      id: this.$route.query.id,
-      img: this.$route.params.img
+      id: this.$route.query.id || store.get("info").id,
+      img: this.$route.params.img || store.get("info").img,
+      isShow: false,
+      isSelected: false,
+      successShow: false,
+
+      obj: store.get("info")
     };
   },
 
@@ -154,6 +208,46 @@ export default {
         type: "fraction"
       }
     });
+  },
+
+  methods: {
+    showClick() {
+      this.isShow = true;
+    },
+    closeClick() {
+      this.isShow = false;
+    },
+    selectedClick() {
+      this.isSelected = !this.isSelected;
+    },
+    reduceNum() {
+      if (this.obj.num > 1) {
+        this.obj.num--;
+      }
+    },
+    addNum() {
+      this.obj.num++;
+    },
+    addCart(obj) {
+      let phoneNumber = store.get("phoneNumber");
+      if (phoneNumber) {
+        this.isShow = false;
+        this.successShow = true;
+        setTimeout(() => {
+          this.successShow = false;
+        }, 2000);
+
+        this.$store.dispatch("cart/" + ADDCART, obj);
+      } else {
+        alert("快去登录，再来赎我");
+      }
+    }
+  },
+
+  watch: {
+    $route() {
+      this.$router.go(0);
+    }
   }
 };
 </script>
@@ -335,4 +429,274 @@ export default {
           width 100%
           display inline-block
           overflow hidden
+
+.sku-wrap
+  font-family PingFangSC-Regular
+
+  .sku-btn
+    width 100%
+    overflow hidden
+    height 0.4rem
+    background #fff
+    position relative
+    font-family STHeitiSC-Medium
+
+    &:after
+      right 0.12rem
+      top 50%
+      content ''
+      display block
+      position absolute
+      width 0.06rem
+      height 0.06rem
+      border-width 1px
+      border-style solid
+      border-color #9b9b9b #9b9b9b transparent transparent
+      transform translateY(-50%) rotate(45deg)
+      -moz-transform translateY(-50%) rotate(45deg)
+      -ms-transform translateY(-50%) rotate(45deg)
+      -webkit-transform translateY(-50%) rotate(45deg)
+
+    span
+      display inline-block
+      overflow hidden
+      color #292929
+      line-height 0.4rem
+      font-size 0.13rem
+
+    span.tag
+      padding 0 0.1rem 0 0.12rem
+
+    span.value
+      text-overflow ellipsis
+      -webkit-line-clamp 1
+      white-space normal
+      max-width 2rem
+      overflow hidden
+      display inline-block
+
+  .sku-pop-layer
+    position fixed
+    left 0
+    top 0
+    width 100%
+    height 100%
+    background-color rgba(0, 0, 0, 0.6)
+    z-index 1111
+
+  .sku-pop
+    position fixed
+    z-index 1111
+    width 100%
+    bottom 0
+    left 0
+    transition all 0.45s ease
+
+    .sku-content
+      margin-top 0.25rem
+      width 100%
+      padding 0.12rem 0.15rem 0
+      position relative
+      background #fff
+
+      .sku-info
+        width 100%
+        position relative
+        min-height 1rem
+        padding-bottom 0.1rem
+
+        .pic
+          width 1.2rem
+          height 1.2rem
+          border 1px solid #d8d8d8
+          position absolute
+          background #d8d8d8
+          top -0.35rem
+          left 0
+          border-radius 0.02rem
+          background-size cover
+
+        .desc
+          width 100%
+          padding-left 1.3rem
+          overflow hidden
+
+          span
+            display inline-block
+            width 100%
+            overflow hidden
+            font-size 0
+
+          span.price
+            font-size 0.18rem
+            color #c33
+            line-height 0.26rem
+            height 0.26rem
+            font-family STHeitiSC-Medium
+
+            i
+              font-size 0.12rem
+
+          span.stock
+            width 100%
+            overflow hidden
+            font-size 0.12rem
+            line-height 0.16rem
+            color #646464
+            height 0.23rem
+
+          span.choosed
+            font-size 0.12rem
+            color #646464
+            line-height 0.17rem
+            text-overflow ellipsis
+            -webkit-line-clamp 2
+            overflow hidden
+            white-space normal
+
+      .spec-wrap
+        max-height 2.35rem
+        overflow scroll
+        -webkit-overflow-scrolling touch
+
+        .spec
+          padding 0.15rem 0
+          border-top 1px solid #dedede
+
+          .title
+            font-size 12px
+            color #646464
+
+          .options
+            font-size 0
+
+            .sku
+              display inline-block
+              background-color #fff
+              padding 0 0.13rem
+              line-height 0.27rem
+              color #646464
+              font-size 12px
+              text-align center
+              border 1px solid #646464
+              border-radius 0.03rem
+              margin 0.1rem 0.1rem 0 0
+
+            .sku.selected
+              background-color #c33
+              color #fff
+              border none
+              position relative
+              border 1px solid #c33
+
+      .purchase-amount
+        padding 0.13rem 0
+        border-top 1px solid #dedede
+        border-bottom 1px solid #dedede
+        display flex
+        justify-content space-between
+
+        .text
+          height 0.3rem
+
+          .title
+            display table-cell
+            vertical-align middle
+            font-size 12px
+            color #646464
+            line-height 0.3rem
+
+        .amount
+          font-size 0
+          color #646464
+
+          .btn-minus, .btn-plus
+            padding 0
+            margin 0
+            display inline-block
+            width 0.3rem
+            height 0.3rem
+            line-height 0.3rem
+            font-size 16px
+            text-align center
+            color #646464
+            background-color #e8e8e8
+            border 0
+            font-family inherit
+            font-weight inherit
+            resize none
+            outline 0
+            box-shadow none
+            -webkit-appearance none
+
+          .btn-minus
+            border-top-right-radius 0.03rem
+            border-bottom-right-radius 0.03rem
+
+          .btn-plus
+            border-top-left-radius 0.03rem
+            border-bottom-left-radius 0.03rem
+
+          .num
+            display inline-block
+            width 0.45rem
+            height 0.3rem
+            line-height 0.3rem
+            font-size 12px
+            text-align center
+
+    .spec-confirm
+      width 100%
+      text-align center
+      color #fff
+      font-size 0
+
+      span
+        display inline-block
+        font-size 0.16rem
+        line-height 0.45rem
+        background-color #c33
+
+      span.half:first-child
+        background-color #f28f25
+
+      span.half
+        width 50%
+
+    .close
+      display block
+      width 0.26rem
+      height 0.26rem
+      top 0.3rem
+      right 0.1rem
+      position absolute
+
+      &:after
+        content ''
+        width 0.16rem
+        height 0.16rem
+        position absolute
+        left 0.05rem
+        top 0.05rem
+        background url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAbtJREFUOBGVU91O1FAQnpnTPgvRYLjREAzxCQAleGMIqCGy2+0uT+ClL4Bt988Q+QnRCwxIuOIaYow3GgmEZ2l7hn5NjunGXVjOzbQz3zfzzZw5vBl3Tn3RVqPRuKZ7nDjuPstJ34sh/pBZOkmSTw/G5SdJb9aS3UJhBgmOXPPP5MnzjXr98rZEm0n/KWu2Y9hfCMN3VwJwGNbO2PAbSvW40+lMjkpQyJ5hm++iEMjAlQocAQCruscki61W7a/zw8Zxb9qq3fc9ehEEwYWLlQrcT7NZ/yEsy0r28GO3O+X8SdJ/AjISV8mIDyioEnKbfzFiXlprPSX9Sj4vFfP54zDODk2AYBR1HyvRIZFSkWg+DNd/O1LVDrQwEBDJQIZIqKjGqt9DE6D/ooUDJl40IvNoAXOoEt33fy1EUe8RhljIflXI/gVgOdBUv2HAzWbtpyPDDijADoAMoCMDhOHhBnATuGr43PmnoKjyEIskzCu4TgeoWhRIMzpij163guAcsVJB+Q4y+13FrI4iA1zugM8Lmus21h8+brfbE3hMhs1brDScdx0UzDU9FpI1SS1H+BiXjOR4B57QHJ7zDaqgyGicofwYAAAAAElFTkSuQmCC') no-repeat 0 0
+        background-size cover
+
+.outputlog
+  z-index 999999999
+  position fixed
+  width 40%
+  height 10%
+  left 30%
+  top 40%
+  word-break break-all
+
+  .text
+    padding 0.14rem 0.18rem
+    font-size 0.16rem
+    font-weight normal
+    display inline-block
+    background-color black
+    color white
+    opacity 0.75
+    border-radius 10px
 </style>

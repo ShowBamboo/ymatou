@@ -44,6 +44,12 @@
         <input type="submit" value="登录" class="submit" id="submit" @click="loginClick" />
       </fieldset>
     </div>
+    <div class="outputlog" v-show="failShow1">
+      <strong class="text">睁大双眼，填写正确信息！</strong>
+    </div>
+    <div class="outputlog" v-show="failShow2">
+      <strong class="text">短信验证码输入有误！</strong>
+    </div>
   </div>
 </template>
 
@@ -60,7 +66,9 @@ export default {
       msgCode: "",
       code: "",
       text: "获取验证码",
-      isDisabled: false
+      isDisabled: false,
+      failShow1: false,
+      failShow2: false
     };
   },
 
@@ -69,12 +77,17 @@ export default {
       let re = /^1[3456789]\d{9}$/;
       let res = this.verifyCode.validate(this.imgCode);
       if (!re.test(this.phoneNumber)) {
-        alert("请填写正确的手机号！");
+        this.failShow1 = true;
+        setTimeout(() => {
+          this.failShow1 = false;
+        }, 2000);
         this.phoneNumber = "";
       }
       if (!res) {
-        alert("请填写正确的验证码！");
-        this.msgCode = "";
+        this.failShow1 = true;
+        setTimeout(() => {
+          this.failShow1 = false;
+        }, 2000);
       }
       if (re.test(this.phoneNumber) && res) {
         //倒计时效果
@@ -102,7 +115,10 @@ export default {
     },
     loginClick() {
       if (!this.phoneNumber || !this.imgCode || !this.msgCode) {
-        alert("请填写完整信息");
+        this.failShow1 = true;
+        setTimeout(() => {
+          this.failShow1 = false;
+        }, 2000);
       } else {
         if (this.msgCode == this.code) {
           store.set("phoneNumber", this.phoneNumber);
@@ -114,7 +130,10 @@ export default {
             }
           });
         } else {
-          alert("短信验证码错误！");
+          this.failShow2 = true;
+          setTimeout(() => {
+            this.failShow2 = false;
+          }, 2000);
         }
       }
     },
@@ -224,4 +243,24 @@ export default {
       background-color #c33
       color #fff
       font-size 15px
+
+.outputlog
+  z-index 999999999
+  position fixed
+  width 40%
+  height 10%
+  left 30%
+  top 60%
+  word-break break-all
+  text-align center
+
+  .text
+    padding 0.14rem 0.18rem
+    font-size 0.16rem
+    font-weight normal
+    display inline-block
+    background-color black
+    color white
+    opacity 0.75
+    border-radius 10px
 </style>

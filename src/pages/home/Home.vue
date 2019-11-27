@@ -73,8 +73,6 @@ export default {
   },
 
   mounted() {
-    console.log(this);
-
     // 吸顶效果
     window.onscroll = function() {
       let scrollTop =
@@ -110,10 +108,6 @@ export default {
         $(".goto-top").css("display", "none");
       }
     };
-    // 返回顶部
-    $(".goto-top").on("tap", function() {
-      window.scrollTo(0, 0);
-    });
   }
 };
 </script>

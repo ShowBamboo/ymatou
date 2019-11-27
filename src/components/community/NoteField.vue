@@ -1,113 +1,187 @@
 <template>
-  <van-loading
-    v-if="oddNote.length === 0"
-    size="24px"
-    type="spinner"
-    color="#1989fa"
-    style="text-align:center;margin-top:30%"
-  >已经到达光速了...</van-loading>
-  <section class="note-field" v-else>
-    <div class="waterfall note-waterfall">
-      <div class="fall-item even" ref="even">
-        <NoteItem v-for="(note , index) in evenNote" :key="index" :note="note"></NoteItem>
-      </div>
-      <div class="fall-item odd" ref="odd">
-        <NoteItem v-for="note in oddNote" :key="note.NoteInfo.Noteid" :note="note"></NoteItem>
+  <vue-waterfall-easy
+    :imgsArr="imgsArr"
+    @scrollReachBottom="getData"
+    :mobileGap="8"
+    @click="handleClick"
+  >
+    <div slot="waterfall-head">
+      <!-- 热门活动 -->
+      <HotField></HotField>
+    </div>
+    <div class="img-info" slot-scope="props">
+      <div class="note-item" data-note-type="1">
+        <p class="note-content">{{props.value.content}}</p>
+
+        <div class="user-info">
+          <div class="user-photo">
+            <img class="user-logo" :src="props.value.userLogo" />
+            <span class="user-name">{{props.value.username}}</span>
+          </div>
+
+          <div class="buttons">
+            <i class="like-icon-base"></i>
+            <span class="collection-num">{{props.value.visitNum}}</span>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </vue-waterfall-easy>
 </template>
 
 <script>
 import { get } from "utils/http";
 
 import _ from "lodash";
-import BScroll from "better-scroll";
+import vueWaterfallEasy from "vue-waterfall-easy";
+import store from "../../../node_modules/store/dist/store.legacy";
 
-import NoteItem from "./NoteItem";
+import HotField from "../../pages/community/HotField";
 
 export default {
   data() {
     return {
-      oddNote: [],
-      evenNote: []
+      imgsArr: [],
+      page: 0 // 当前加载的加载图片的次数
     };
   },
 
   components: {
-    NoteItem
+    HotField,
+    vueWaterfallEasy
   },
 
-  async mounted() {
-    let result = await get({
-      url:
-        "/ymt/note/api/GetSocialDiscoverList?Page=0&pageSize=10&AccessToken=&UserID=&Cookieid=&yid="
-    });
-
-    for (let i = 0; i < result.Result.length; i++) {
-      if (i % 2 == 0) {
-        this.evenNote.push(result.Result[i]);
-      } else {
-        this.oddNote.push(result.Result[i]);
-      }
-    }
-
-    let bScroll = new BScroll(".scroll-wrap", {
-      pullUpLoad: true,
-      click: true,
-      probeType: 2
-    });
-
-    //上拉加载更多
-    let page = 1;
-    bScroll.on("pullingUp", async () => {
-      let resultMore = await get({
-        url: `/ymt/note/api/GetSocialDiscoverList?Page=${page++}&pageSize=10&AccessToken=&UserID=&Cookieid=&yid=`
+  methods: {
+    async getData() {
+      let result = await get({
+        url: `/ymt/note/api/GetSocialDiscoverList?Page=${this
+          .page++}&pageSize=10&AccessToken=&UserID=&Cookieid=&yid=`
       });
+      this.page++;
 
-      for (let i = 0; i < resultMore.Result.length; i++) {
-        setTimeout(() => {
-          console.log(
-            this.$refs.even.offsetHeight,
-            this.$refs.odd.offsetHeight
-          );
+      let info = result.Result.map(function(value, index) {
+        return {
+          src: value.NoteInfo.TagImage[0].Pic,
+          noteId: value.NoteInfo.NoteId,
+          content: value.NoteInfo.Content,
+          addTime: value.NoteInfo.AddTime,
+          username: value.UserInfo.UserName,
+          userId: value.UserInfo.UserId,
+          userLogo: value.UserInfo.UserLogo,
+          visitNum: value.ExtInfo.VisitNum
+        };
+      });
+      this.imgsArr = [...this.imgsArr, ...info];
+      console.log(info);
+    },
+    handleClick(event, { index, value }) {
+      console.log(value);
+      store.set("communityDetail", value);
+      this.$router.push({
+        name: "communitydetail",
+        query: {
+          noteId: value.noteId
+        },
+        params: value
+      });
+    }
+  },
 
-          if (this.$refs.even.offsetHeight < this.$refs.odd.offsetHeight) {
-            console.log(1);
-
-            this.evenNote.push(resultMore.Result[i]);
-          } else {
-            console.log(2);
-
-            this.oddNote.push(resultMore.Result[i]);
-          }
-        }, 0);
-      }
-      // setTimeout(() => {
-      //   bScroll.refresh();
-      // }, 300);
-
-      await this.$nextTick();
-      bScroll.refresh();
-      bScroll.finishPullUp();
-    });
+  created() {
+    this.getData();
   }
 };
 </script>
 
 <style lang="stylus" scoped>
-.note-field
-  .waterfall
+.note-item
+  margin 0 0 0.06rem
+  padding-bottom 0.06rem
+  background-color #fff
+  border 0.01rem solid #f1f1f1
+
+  .note-img
     width 100%
+    font-size 0
+    position relative
+
+    img
+      width 100%
+      height 100%
+      opacity 0
+      transition opacity 0.5s ease
+
+  .note-content
+    margin-top 0.1rem
+    padding 0 0.04rem
+    color #292929
+    font-size 0.1rem
+    transform scale(0.9)
+    line-height 0.18rem
+    display -webkit-box
+    -webkit-box-orient vertical
+    -webkit-line-clamp 2
+    overflow hidden
+
+  .user-info
+    margin-top 0.04rem
     display flex
     flex-flow row nowrap
-    background #e8e8e8
-    padding 0.1rem 0.04rem
+    justify-content space-between
+    align-items flex-start
 
-    .fall-item
-      width 50%
-      height max-content
+    .user-photo
+      padding 0 0.1rem
+      display flex
+      flex-flow row nowrap
+      justify-content flex-start
+      align-items flex-start
 
-      &:first-child
-        padding-right 0.04rem
+      .user-logo
+        float left
+        display block
+        margin-top 0.1rem
+        width 0.22rem
+        height 0.22rem
+        -o-object-fit cover
+        object-fit cover
+        border-radius 50%
+        border 0.02rem solid #e6e6e6
+
+      .user-name
+        display inline-block
+        width 0.8rem
+        padding-top 0.15rem
+        color #666
+        font-size 0.1rem
+        transform scale(0.8)
+        white-space nowrap
+        word-break break-word
+        overflow hidden
+        text-overflow ellipsis
+        word-wrap break-word
+        word-break break-all
+
+    .buttons
+      display flex
+      align-items center
+      vertical-align middle
+      height 0.3rem
+      margin-right 0.1rem
+      margin-top 0.07rem
+
+      .like-icon-base
+        background-position 0 0
+        display inline-block
+        vertical-align middle
+        margin-right 0.07rem
+        width 0.15rem
+        height 0.1rem
+        background url('https://m.ymatou.com/note/images//discovery/icon_see-49505d249c.png') center center no-repeat
+        background-size cover
+
+      .collection-num
+        font-size 0.1rem
+        transform scale(0.9)
+        color #666
 </style>

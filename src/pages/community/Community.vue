@@ -22,7 +22,7 @@
         <!-- 热门活动 -->
         <!-- <HotField></HotField> -->
         <!-- 瀑布流笔记 -->
-        <Test></Test>
+        <NoteField></NoteField>
       </div>
     </div>
   </div>
@@ -31,15 +31,13 @@
 <script>
 import HotField from "./HotField";
 import NoteField from "components/community/NoteField";
-import Test from "components/community/Test";
 
 import BScroll from "better-scroll";
 
 export default {
   components: {
     HotField,
-    NoteField,
-    Test
+    NoteField
   }
 };
 </script>

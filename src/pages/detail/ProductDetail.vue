@@ -155,6 +155,9 @@
         <div class="outputlog" v-show="successShow">
           <strong class="text">哈尼，我在购物车等你哦~</strong>
         </div>
+        <div class="outputlog" v-show="failShow">
+          <strong class="text">小主快去登录，再来赎我！</strong>
+        </div>
       </div>
     </div>
   </div>
@@ -182,6 +185,7 @@ export default {
       isShow: false,
       isSelected: false,
       successShow: false,
+      failShow: false,
 
       obj: store.get("info")
     };
@@ -199,8 +203,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.$route.params);
-
     //图片拖拽
     var mySwiper = new Swiper(".swiper-container", {
       pagination: {
@@ -239,7 +241,10 @@ export default {
 
         this.$store.dispatch("cart/" + ADDCART, obj);
       } else {
-        alert("快去登录，再来赎我");
+        this.failShow = true;
+        setTimeout(() => {
+          this.failShow = false;
+        }, 2000);
       }
     }
   },
@@ -689,6 +694,7 @@ export default {
   left 30%
   top 40%
   word-break break-all
+  text-align center
 
   .text
     padding 0.14rem 0.18rem

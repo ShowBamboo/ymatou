@@ -1,9 +1,15 @@
 <template>
-  <div class="goto-top"></div>
+  <div class="goto-top" @click="gotoTop"></div>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    gotoTop() {
+      window.scrollTo(0, 0);
+    }
+  }
+};
 </script>
 
 <style lang="stylus" scoped>

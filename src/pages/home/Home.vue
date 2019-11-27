@@ -1,9 +1,9 @@
 <template>
   <div class="home-wrap">
     <!-- 广告 -->
-    <LoadBanner></LoadBanner>
+    <LoadBanner ref="loadbanner"></LoadBanner>
     <!-- 导航 -->
-    <div id="load-waptopbar" class="loadwaptopbar">
+    <div id="load-waptopbar" class="loadwaptopbar" ref="loadwaptopbar">
       <div class="loadtopnav">
         <div class="nav" id="load-nav-content">
           <router-link tag="a" to="/home">
@@ -32,7 +32,7 @@
     <!-- 主体 -->
     <div class="ymatou-wrapper">
       <!-- 轮播图 -->
-      <Banner></Banner>
+      <Banner ref="banner"></Banner>
       <!-- 限时抢 -->
       <Xsq></Xsq>
       <!-- 小编精选 -->
@@ -50,7 +50,7 @@
       <div class="desc">上海洋码头网络技术有限公司 版权所有</div>
     </div>
     <!-- 返回顶部 -->
-    <GotoTop class="goto-top"></GotoTop>
+    <GotoTop class="goto-top" ref="gotoTop"></GotoTop>
   </div>
 </template>
 
@@ -74,38 +74,30 @@ export default {
 
   mounted() {
     // 吸顶效果
-    window.onscroll = function() {
-      let scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
+    window.onscroll = () => {
+      if (this.$route.name == "home") {
+        let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop;
 
-      let AdHeight = $(".loadbanner").height();
-      let NavHeight = $(".loadwaptopbar").height();
-      if (scrollTop >= AdHeight) {
-        $(".loadwaptopbar").css({
-          position: "fixed",
-          top: 0,
-          left: 0,
-          zIndex: 100
-        });
-        $(".banner").css({
-          marginTop: NavHeight
-        });
-      } else {
-        $(".loadwaptopbar").css({
-          position: "static",
-          top: 0,
-          left: 0,
-          zIndex: 100
-        });
-        $(".banner").css({
-          marginTop: 0
-        });
-      }
-      //返回顶部显示隐藏
-      if (scrollTop >= 1295) {
-        $(".goto-top").css("display", "block");
-      } else {
-        $(".goto-top").css("display", "none");
+        let loadwaptopbar = this.$refs.loadwaptopbar;
+        let NavHeight = loadwaptopbar.clientHeight;
+        let loadbanner = this.$refs.loadbanner.$el;
+        let AdHeight = loadbanner.clientHeight;
+        let banner = this.$refs.banner.$el;
+
+        if (scrollTop >= AdHeight) {
+          loadwaptopbar.style = "position: fixed;top: 0;left: 0;z-index: 100";
+          banner.style = `margin-top:${NavHeight}px`;
+        } else {
+          loadwaptopbar.style = "position: static;top: 0;left: 0;z-index: 100";
+          banner.style = "margin-top: 0";
+        }
+        //返回顶部显示隐藏
+        if (scrollTop >= 1295) {
+          this.$refs.gotoTop.$el.style = "display:block";
+        } else {
+          this.$refs.gotoTop.$el.style = "display:none";
+        }
       }
     };
   }

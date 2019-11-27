@@ -88,6 +88,7 @@ export default {
         setTimeout(() => {
           this.failShow1 = false;
         }, 2000);
+        this.imgCode = "";
       }
       if (re.test(this.phoneNumber) && res) {
         //倒计时效果

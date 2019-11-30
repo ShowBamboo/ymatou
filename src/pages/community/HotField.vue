@@ -4,7 +4,7 @@
   <section class="hot-field">
     <div class="title-bar">
       <div class="title">热门活动</div>
-      <a module_name="activity" class="more" href module_index>查看全部</a>
+      <a class="more">查看全部</a>
     </div>
     <div class="scroll-wrapper">
       <ul>

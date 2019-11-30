@@ -11,14 +11,14 @@
     >
       <img class="picture lazyload" :src="product.pic" alt />
       <div class="info">
-        <div class="name">{{product.name}}</div>
+        <div class="name">{{ product.name }}</div>
         <div class="info-tag">
           <span>包邮包税</span>
         </div>
-        <div class="price">¥ {{product.price}}</div>
+        <div class="price">¥ {{ product.price }}</div>
         <div class="country">
           <img class="flag" :src="product.sellerInfo.countryIconUrl" alt="flag" />
-          {{product.sellerInfo.countryName}}
+          {{ product.sellerInfo.countryName }}
         </div>
       </div>
     </a>

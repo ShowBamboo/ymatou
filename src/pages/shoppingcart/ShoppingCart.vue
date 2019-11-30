@@ -1,7 +1,7 @@
 <template>
   <div class="shopcart">
     <div data-v-e282b9cc class="topbar">
-      <div data-v-e282b9cc class="top-title">购物车</div>
+      <div data-v-e282b9cc class="top-title">购物车({{list.length}})</div>
       <div data-v-e282b9cc class="top-home">
         <router-link to="/home" tag="a">
           <img
@@ -26,7 +26,7 @@
       <div data-v-031042ee data-v-e282b9cc class="seller" v-for="item in list" :key="item.id">
         <div data-v-031042ee class="seller-info">
           <div data-v-031042ee class="checkbox-box">
-            <i data-v-031042ee class="switch" :class="{active:isActive}"></i>
+            <!-- <i data-v-031042ee class="switch" :class="{active:isActive}"></i> -->
           </div>
           <div data-v-031042ee class="info">
             <div data-v-031042ee class="head-img">
@@ -56,7 +56,11 @@
                       @click="singleChoosed($event,item.price,item.num)"
                     ></i>
                   </span>
-                  <div data-v-4d071ed4 class="prod-warp">
+                  <div
+                    data-v-4d071ed4
+                    class="prod-warp"
+                    @click="gotoDetail(item.id,item.name,item.img)"
+                  >
                     <div data-v-4d071ed4 class="prod-info">
                       <div data-v-4d071ed4 class="pic">
                         <img
@@ -156,7 +160,7 @@ export default {
       totalPrice: 0,
       isDisabled: true,
       isShow: false,
-      deleteId:0
+      deleteId: 0
     };
   },
 
@@ -227,7 +231,7 @@ export default {
 
     deleteClick(id) {
       this.isShow = true;
-      this.deleteId = id
+      this.deleteId = id;
     },
 
     cancelDelete() {
@@ -237,6 +241,19 @@ export default {
     sureDelete() {
       this.isShow = false;
       this.$store.dispatch("cart/" + DELETE, this.deleteId);
+    },
+
+    gotoDetail(id, name, img) {
+      this.$router.push({
+        name: "productdetail",
+        query: {
+          id
+        },
+        params: {
+          name,
+          img
+        }
+      });
     }
   }
 };

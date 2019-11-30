@@ -3,19 +3,19 @@
     <van-swipe :autoplay="2000" indicator-color="#c33">
       <van-swipe-item>
         <img
-          src="http://pic1.ymatou.com/G02/M06/DE/4C/CgzUDF3OS9uAQFB1AAHLBy1_jzE039_375_128_o.png"
+          src="http://pic1.ymatou.com/G02/M02/14/FE/CgzUCl3hHhqAU-X0AAOQnYmytFE121_375_128_o.png"
           alt
         />
       </van-swipe-item>
       <van-swipe-item>
         <img
-          src="http://pic1.ymatou.com/G01/M01/57/C4/CgzUB13MB-OAbx2FAAJH18ZGof4731_375_128_o.png"
+          src="http://pic1.ymatou.com/G01/M02/DD/A0/CgzUCF3hHMqAD7FoAAPDIAxcgzQ129_375_128_o.png"
           alt
         />
       </van-swipe-item>
       <van-swipe-item>
         <img
-          src="http://pic1.ymatou.com/G01/M00/5D/18/CgzUCV3NOHGAd25eAAPqbqJGD2I375_375_128_o.png"
+          src="http://pic1.ymatou.com/G01/M01/DD/AB/CgzUCF3hHhSAcbWuAAK0r_wn4e8128_375_128_o.png"
           alt
         />
       </van-swipe-item>

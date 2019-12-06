@@ -53,7 +53,7 @@
                       data-v-4d071ed4
                       class="switch"
                       :class="{active:isActive}"
-                      @click="singleChoosed($event,item.price,item.num)"
+                      @click="singleChoosed($event,item)"
                     ></i>
                   </span>
                   <div
@@ -142,7 +142,12 @@
           </span>
           <span data-v-0c59cb10 class="carriage">( 不含运费)</span>
         </div>
-        <div data-v-0c59cb10 class="btn-goorder" :class="{disabled:isDisabled}">去结算</div>
+        <div
+          data-v-0c59cb10
+          class="btn-goorder"
+          :class="{disabled:isDisabled}"
+          @click="settlement "
+        >去结算</div>
       </div>
     </div>
   </div>
@@ -151,7 +156,7 @@
 <script>
 import Interested from "components/home/Interested";
 
-import { PLUS, MINI, DELETE } from "store/modules/action-types";
+import { PLUS, MINI, DELETE, ADDORDER } from "store/modules/action-types";
 
 export default {
   data() {
@@ -175,16 +180,17 @@ export default {
   },
 
   methods: {
-    singleChoosed(ev, price, num) {
+    singleChoosed(ev, item) {
       if (ev.target.className.indexOf("active") != -1) {
         ev.target.className = "switch";
 
         this.totalPrice =
-          Math.round((this.totalPrice - price * num) * 100) / 100;
+          Math.round((this.totalPrice - item.price * item.num) * 100) / 100;
       } else {
         ev.target.className = "switch active";
         this.totalPrice =
-          Math.round((this.totalPrice + price * num) * 100) / 100;
+          Math.round((this.totalPrice + item.price * item.num) * 100) / 100;
+        this.$store.dispatch("order/" + ADDORDER, item);
       }
       if (this.totalPrice === 0) {
         this.isDisabled = true;
@@ -253,6 +259,11 @@ export default {
           name,
           img
         }
+      });
+    },
+    settlement() {
+      this.$router.push({
+        name: "order"
       });
     }
   }
@@ -412,6 +423,7 @@ export default {
 
       .disabled
         background-color #9b9b9b
+        pointer-events none
 
     .notIphoneX
       position fixed
